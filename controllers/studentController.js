@@ -27,13 +27,14 @@ exports.getStudent = async (req, res, next) => {
 
 exports.updateMe = async (req, res, next) => {
   //@ update the user
+  const { studentId } = req.params;
   const updateData = await Student.findByIdAndUpdate(
-    _id,
+    studentId,
     {
       student_name: req.body.name,
       phone: req.body.phone,
       address: req.body.address,
-      imagePath: req.body.photoUrl,
+      imagePath: req.body.imagePath,
     },
     {
       runValidators: true,
