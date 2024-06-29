@@ -3,13 +3,8 @@ const sharp = require("sharp");
 const Student = require("../models/studentModel");
 const AppError = require("../utils/appError");
 
-//creating multer storage
-// const multerStorage = multer.memoryStorage();
-
-import { createClient } from "@supabase/supabase-js";
 const supabaseUrl = "https://qlbruwvurmckjguvvjmp.supabase.co";
 const supabaseKey = process.env.SUPABASE_KEY;
-const supabase = createClient(supabaseUrl, supabaseKey);
 
 // const multerStorage = multer.diskStorage({
 //   destination: (req, file, cb) => {
@@ -74,94 +69,94 @@ exports.getStudent = async (req, res, next) => {
   });
 };
 
-// exports.updateMe = async (req, res, next) => {
-//   // ! get the photo
-//   let photo;
-//   console.log(req.file);
-//   if (req.file) photo = req.file.filename;
-
-//   const { studentId } = req.params;
-//   const _id = studentId.split("=")[1];
-
-//   //@ update the user
-//   const updateData = await Student.findByIdAndUpdate(
-//     _id,
-//     {
-//       student_name: req.body.name,
-//       phone: req.body.phone,
-//       address: req.body.address,
-//       imagePath: photo,
-//     },
-//     {
-//       runValidators: true,
-//       new: true,
-//     }
-//   );
-
-//   if (!updateData) {
-//     res.status(404).json({
-//       status: "error",
-//       message: "Error while modifing the data",
-//     });
-//   }
-
-//   res.status(200).json({
-//     status: "success",
-//     message: "Data Modified",
-//     data: updateData,
-//   });
-// };
-
 exports.updateMe = async (req, res, next) => {
-  try {
-    let photoUrl = null;
-    if (req.file) {
-      const { data, error } = await supabase.storage
-        .from("khatabook")
-        .upload(`public/student-${Date.now()}.jpg`, req.file.buffer, {
-          cacheControl: "3600",
-          upsert: false,
-          contentType: req.file.mimetype,
-        });
+  // ! get the photo
+  let photo;
+  console.log(req.file);
+  if (req.file) photo = req.file.filename;
 
-      if (error) throw error;
+  const { studentId } = req.params;
+  const _id = studentId.split("=")[1];
 
-      photoUrl = `${supabaseUrl}/storage/v1/object/public/khatabook/${data.path}`;
+  //@ update the user
+  const updateData = await Student.findByIdAndUpdate(
+    _id,
+    {
+      student_name: req.body.name,
+      phone: req.body.phone,
+      address: req.body.address,
+      imagePath: photo,
+    },
+    {
+      runValidators: true,
+      new: true,
     }
+  );
 
-    const { studentId } = req.params;
-    const _id = studentId.split("=")[1];
-
-    const updateData = await Student.findByIdAndUpdate(
-      _id,
-      {
-        student_name: req.body.name,
-        phone: req.body.phone,
-        address: req.body.address,
-        imagePath: photoUrl,
-      },
-      {
-        runValidators: true,
-        new: true,
-      }
-    );
-
-    if (!updateData) {
-      return res.status(404).json({
-        status: "error",
-        message: "Error while modifying the data",
-      });
-    }
-
-    res.status(200).json({
-      status: "success",
-      message: "Data Modified",
-      data: updateData,
+  if (!updateData) {
+    res.status(404).json({
+      status: "error",
+      message: "Error while modifing the data",
     });
-  } catch (error) {
-    next(error);
   }
+
+  res.status(200).json({
+    status: "success",
+    message: "Data Modified",
+    data: updateData,
+  });
 };
+
+// exports.updateMe = async (req, res, next) => {
+//   try {
+//     let photoUrl = null;
+//     if (req.file) {
+//       const { data, error } = await supabase.storage
+//         .from("khatabook")
+//         .upload(`public/student-${Date.now()}.jpg`, req.file.buffer, {
+//           cacheControl: "3600",
+//           upsert: false,
+//           contentType: req.file.mimetype,
+//         });
+
+//       if (error) throw error;
+
+//       photoUrl = `${supabaseUrl}/storage/v1/object/public/khatabook/${data.path}`;
+//     }
+
+//     const { studentId } = req.params;
+//     const _id = studentId.split("=")[1];
+
+//     const updateData = await Student.findByIdAndUpdate(
+//       _id,
+//       {
+//         student_name: req.body.name,
+//         phone: req.body.phone,
+//         address: req.body.address,
+//         imagePath: photoUrl,
+//       },
+//       {
+//         runValidators: true,
+//         new: true,
+//       }
+//     );
+
+//     if (!updateData) {
+//       return res.status(404).json({
+//         status: "error",
+//         message: "Error while modifying the data",
+//       });
+//     }
+
+//     res.status(200).json({
+//       status: "success",
+//       message: "Data Modified",
+//       data: updateData,
+//     });
+//   } catch (error) {
+//     next(error);
+//   }
+// };
 
 exports.createStudent = async (req, res, next) => {
   const student = await Student.create(req.body);
