@@ -5,11 +5,7 @@ const router = express.Router({ mergeParams: true });
 
 router.route("/getStudnet/:accountId").get(studentController.getStudent);
 
-router.route("/updateme/:studentId").patch(
-  studentController.uploadStudentPhoto,
-  // studentController.resizeUserPhoto,
-  studentController.updateMe
-);
+router.route("/updateme/:studentId").patch(studentController.updateMe);
 
 router.route("/createStudent").post(studentController.createStudent);
 
