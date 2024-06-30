@@ -13,6 +13,11 @@ const classSchema = new mongoose.Schema({
     required: [true, "Please provide teacher name"],
   },
 
+  teacherId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Teacher",
+  },
+
   account_no: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Account",
