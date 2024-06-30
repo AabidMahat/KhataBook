@@ -86,14 +86,8 @@ exports.updateTeacher = catchAsync(async (req, res, next) => {
 });
 
 exports.deleteTeacher = catchAsync(async (req, res, next) => {
-  const teacher = await Teacher.findByIdAndDelete(req.params.teacherId);
+  await Teacher.findByIdAndDelete(req.params.teacherId);
 
-  if (!teacher) {
-    return res.status(404).json({
-      status: "error",
-      message: "Error while Deleting",
-    });
-  }
   res.status(204).json({
     status: "delete successfully",
     data: null,
