@@ -62,10 +62,14 @@ exports.createTeacher = catchAsync(async (req, res, next) => {
 });
 
 exports.updateTeacher = catchAsync(async (req, res, next) => {
-  const teacher = await Teacher.findByIdAndUpdate(req.params.id, req.body, {
-    new: true,
-    runValidators: true,
-  });
+  const teacher = await Teacher.findByIdAndUpdate(
+    req.params.teacherId,
+    req.body,
+    {
+      new: true,
+      runValidators: true,
+    }
+  );
 
   if (!teacher) {
     return res.status(404).json({
