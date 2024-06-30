@@ -6,16 +6,6 @@ const classSchema = new mongoose.Schema({
   class_name: {
     type: String,
     required: [true, "Please provide class name"],
-    unique: true, // Ensure the class name is unique
-    validate: {
-      validator: async function (value) {
-        const count = await this.model("Class").countDocuments({
-          class_name: value,
-        });
-        return count === 0;
-      },
-      message: "Class name already exists",
-    },
   },
 
   teacher_name: {

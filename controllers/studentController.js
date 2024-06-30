@@ -26,6 +26,7 @@ exports.getStudent = async (req, res, next) => {
 };
 
 exports.updateMe = async (req, res, next) => {
+  console.log(req.body);
   //@ update the user
   const { studentId } = req.params;
   const updateData = await Student.findByIdAndUpdate(
