@@ -19,18 +19,6 @@ const classSchema = new mongoose.Schema({
   },
 });
 
-// Add a pre-save hook to ensure class_name is unique
-classSchema.pre("save", async function (next) {
-  const classExists = await this.constructor.findOne({
-    class_name: this.class_name,
-  });
-  if (classExists) {
-    const error = new Error("Class name already exists");
-    return next(error);
-  }
-  next();
-});
-
 const Class = mongoose.model("Class", classSchema);
 
 module.exports = Class;
