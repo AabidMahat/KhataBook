@@ -6,6 +6,9 @@ const router = express.Router({ mergeParams: true });
 router.route("/getStudnet/:accountId").get(studentController.getStudent);
 
 router.route("/updateme/:studentId").patch(studentController.updateMe);
+router
+  .route("/deleteStudent/:studentId")
+  .delete(studentController.deleteStudent);
 
 router.route("/createStudent").post(studentController.createStudent);
 

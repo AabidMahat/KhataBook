@@ -57,6 +57,20 @@ exports.updateMe = async (req, res, next) => {
   });
 };
 
+exports.deleteStudent = async (req, res, next) => {
+  const { studentId } = req.params;
+  const deleteData = await Student.findByIdAndDelete(studentId);
+  if (!deleteData) {
+    return res.status(404).json({
+      status: "error",
+      message: "Error while deleting the data",
+    });
+  }
+  res.status(200).json({
+    status: 200,
+  });
+};
+
 exports.createStudent = async (req, res, next) => {
   const student = await Student.create(req.body);
 
