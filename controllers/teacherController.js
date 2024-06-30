@@ -68,7 +68,10 @@ exports.updateTeacher = catchAsync(async (req, res, next) => {
   });
 
   if (!teacher) {
-    return next(new AppError("No Teacher found", 404));
+    return res.status(404).json({
+      status: "error",
+      message: "Error while Updating",
+    });
   }
   res.status(200).json({
     status: "success",
@@ -82,7 +85,10 @@ exports.deleteTeacher = catchAsync(async (req, res, next) => {
   const teacher = await Teacher.findByIdAndDelete(req.params.id);
 
   if (!teacher) {
-    return next(new AppError("No Teacher found", 404));
+    return res.status(404).json({
+      status: "error",
+      message: "Error while Deleting",
+    });
   }
   res.status(204).json({
     status: "delete successfully",
