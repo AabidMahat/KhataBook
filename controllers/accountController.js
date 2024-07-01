@@ -59,9 +59,15 @@ exports.createNewAccount = async (req, res, next) => {
 
 exports.getAllAccount = async (req, res, next) => {
   const { userId } = req.params;
-  const accounts = await Account.find({
-    user_id: userId,
-  });
+
+  let accounts;
+  if (userId)
+    accounts = await Account.find({
+      user_id: userId,
+    });
+  else {
+    accounts = await Account.find();
+  }
 
   if (!accounts) {
     return res.status(404).json({
@@ -91,7 +97,7 @@ exports.getAccount = async (req, res, next) => {
 
   if (!account) {
     return res.status(404).json({
-      status: "Failed",
+      status: "error",
       message: "No account founded",
     });
   }
@@ -102,6 +108,29 @@ exports.getAccount = async (req, res, next) => {
     message: "Fetched All account",
     data: {
       account: account,
+    },
+  });
+};
+
+exports.updateAccount = async (req, res, next) => {
+  const { account_id } = req.params;
+
+  const updateAccount = Account.findByIdAndUpdate(account_id, req.body, {
+    new: true,
+  });
+  if (!updateAccount) {
+    return res.status(404).json({
+      status: "error",
+      message: "Error while updating account",
+    });
+  }
+
+  // Send a successful response for account creation
+  res.status(200).json({
+    status: "Success",
+    message: "Account updated",
+    data: {
+      account: updateAccount,
     },
   });
 };
