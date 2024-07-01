@@ -129,7 +129,7 @@ exports.getAccount = async (req, res, next) => {
 exports.updateAccount = async (req, res, next) => {
   const { account_id } = req.params;
 
-  const updateAccount = Account.findByIdAndUpdate(account_id, req.body, {
+  const updateAccount = await Account.findByIdAndUpdate(account_id, req.body, {
     new: true,
   });
   if (!updateAccount) {
