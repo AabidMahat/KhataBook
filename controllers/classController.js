@@ -1,4 +1,5 @@
 const Class = require("../models/classModel");
+const Student = require("../models/studentModel");
 
 exports.createNewClass = async (req, res, next) => {
   const { class_name, teacher_name, account_no, teacherId } = req.body;
@@ -23,26 +24,50 @@ exports.createNewClass = async (req, res, next) => {
 };
 
 exports.updateClass = async (req, res, next) => {
-  const updatedClass = await Class.findByIdAndUpdate(
-    req.params.classId,
-    req.body,
-    {
-      new: true,
-      runValidators: true,
+  try {
+    // Find the class by ID
+    const getClass = await Class.findById(req.params.classId);
+    if (!getClass) {
+      return res.status(404).json({
+        status: "error",
+        message: "Class not found",
+      });
     }
-  );
 
-  if (!updatedClass) {
-    return res.status(404).json({
+    // Update the class with new data
+    const updatedClass = await Class.findByIdAndUpdate(
+      req.params.classId,
+      req.body,
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+
+    if (!updatedClass) {
+      return res.status(404).json({
+        status: "error",
+        message: "Error while updating class",
+      });
+    }
+
+    // Update the students' class names directly in the query
+    await Student.updateMany(
+      { classes: getClass.class_name },
+      { $set: { "classes.$": req.body.class_name } }
+    );
+
+    return res.status(200).json({
+      status: "success",
+      message: "Data Updated Successfully",
+      data: updatedClass,
+    });
+  } catch (err) {
+    return res.status(500).json({
       status: "error",
-      message: "Error while Updating",
+      message: err.message,
     });
   }
-  return res.status(200).json({
-    status: "success",
-    message: "Data Updated Successfully",
-    data: updatedClass,
-  });
 };
 
 exports.deleteClass = async (req, res, next) => {
