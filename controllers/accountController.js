@@ -127,11 +127,14 @@ exports.getAccount = async (req, res, next) => {
 };
 
 exports.updateAccount = async (req, res, next) => {
-  const { account_id } = req.params;
-
-  const updateAccount = await Account.findByIdAndUpdate(account_id, req.body, {
-    new: true,
-  });
+  const updateAccount = await Account.findByIdAndUpdate(
+    req.params.account_id,
+    req.body,
+    {
+      new: true,
+      runValidators: true,
+    }
+  );
   if (!updateAccount) {
     return res.status(404).json({
       status: "error",

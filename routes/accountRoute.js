@@ -9,6 +9,6 @@ router.route("/getAdminAccounts").get(accountController.getAdminAccount);
 router.route("/getAccount/:account_id").get(accountController.getAccount);
 router
   .route("/updateAccount/:account_id")
-  .post(accountController.updateAccount);
+  .patch(accountController.updateAccount);
 
 module.exports = router;
