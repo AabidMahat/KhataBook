@@ -22,6 +22,37 @@ exports.createNewClass = async (req, res, next) => {
   });
 };
 
+exports.updateClass = async (req, res, next) => {
+  const updatedClass = await Class.findByIdAndUpdate(
+    req.params.classId,
+    req.body,
+    {
+      new: true,
+      runValidators: true,
+    }
+  );
+
+  if (!updatedClass) {
+    return res.status(404).json({
+      status: "error",
+      message: "Error while Updating",
+    });
+  }
+  return res.status(200).json({
+    status: "success",
+    message: "Data Updated Successfully",
+    data: updatedClass,
+  });
+};
+
+exports.deleteClass = async (req, res, next) => {
+  await Class.findByIdAndDelete(req.params.classId);
+  res.status(204).json({
+    status: "delete successfully",
+    data: null,
+  });
+};
+
 exports.getClasses = async (req, res, next) => {
   const { account_no } = req.params;
   const account_id = account_no.split("=")[1];
