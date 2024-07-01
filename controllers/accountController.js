@@ -60,14 +60,28 @@ exports.createNewAccount = async (req, res, next) => {
 exports.getAllAccount = async (req, res, next) => {
   const { userId } = req.params;
 
-  let accounts;
-  if (userId)
-    accounts = await Account.find({
-      user_id: userId,
+  const accounts = await Account.find({
+    user_id: userId,
+  });
+
+  if (!accounts) {
+    return res.status(404).json({
+      status: "Failed",
+      message: "No account founded",
     });
-  else {
-    accounts = await Account.find();
   }
+
+  // Send a successful response for account creation
+  res.status(200).json({
+    status: "Success",
+    message: "Fetched All account",
+    data: {
+      account: accounts,
+    },
+  });
+};
+exports.getAdminAccount = async (req, res, next) => {
+  const accounts = await Account.find();
 
   if (!accounts) {
     return res.status(404).json({
