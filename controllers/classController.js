@@ -51,10 +51,10 @@ exports.updateClass = async (req, res, next) => {
       });
     }
 
-    // Update the students' class names directly in the query
+    // Update all students who are in the class being updated
     await Student.updateMany(
       { classes: getClass.class_name },
-      { $set: { "classes.$": req.body } }
+      { classes: req.body.class_name }
     );
 
     return res.status(200).json({
