@@ -8,4 +8,6 @@ router.route("/login").post(userController.loginUser);
 
 router.route("/getUser/:userId").get(userController.getUser);
 
+router.route("/updateUser/:userId").patch(userController.updateUser);
+
 module.exports = router;
