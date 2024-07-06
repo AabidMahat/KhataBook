@@ -23,7 +23,10 @@ exports.getTransactionData = async (req, res, next) => {
       data,
     });
   } catch (err) {
-    console.log(err);
+    res.status(500).json({
+      status: "error",
+      message: err.message,
+    });
   }
 };
 
@@ -57,29 +60,36 @@ exports.getAllTransaction = async (req, res, next) => {
 };
 
 exports.addAmount = async (req, res, next) => {
-  const { student_id, account_id, pendingAmount, transactionType, amount } =
-    req.body;
+  try {
+    const { student_id, account_id, pendingAmount, transactionType, amount } =
+      req.body;
 
-  const newTransaction = await Transaction.create({
-    student_id,
-    account_id,
-    transactionType,
-    amount,
-    pendingAmount,
-  });
+    const newTransaction = await Transaction.create({
+      student_id,
+      account_id,
+      transactionType,
+      amount,
+      pendingAmount,
+    });
 
-  if (!newTransaction) {
-    res.status(404).json({
-      status: "Error",
-      message: "Error While performing the transaction",
+    if (!newTransaction) {
+      res.status(404).json({
+        status: "Error",
+        message: "Error While performing the transaction",
+      });
+    }
+    res.status(201).json({
+      status: "success",
+      data: {
+        newTransaction,
+      },
+    });
+  } catch (err) {
+    res.status(500).json({
+      status: "error",
+      message: err.message,
     });
   }
-  res.status(201).json({
-    status: "success",
-    data: {
-      newTransaction,
-    },
-  });
 };
 
 exports.deleteTransaction = async (req, res, next) => {
@@ -95,7 +105,10 @@ exports.deleteTransaction = async (req, res, next) => {
       message: "Deleted the transaction",
     });
   } catch (err) {
-    console.log(err);
+    res.status(500).json({
+      status: "error",
+      message: err.message,
+    });
   }
 };
 
@@ -128,7 +141,6 @@ exports.updateTransaction = async (req, res, next) => {
     req.trans = updatedTransaction;
     //Calculating aggregate function
   } catch (err) {
-    console.error("Error updating transaction:", err);
     res.status(500).json({
       status: "error",
       message: "An error occurred while updating the transaction",

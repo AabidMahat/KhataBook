@@ -1,7 +1,7 @@
 const fs = require("fs");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
-const Tour = require("./models/transactionModel");
+const Tour = require("./models/staffModel");
 dotenv.config({ path: "./config.env" });
 
 const DB = process.env.DATABASE_URL;

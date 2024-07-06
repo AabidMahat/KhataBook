@@ -2,34 +2,102 @@ const User = require("../models/userModel");
 const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
 
-exports.createNewUser = catchAsync(async (req, res, next) => {
-  const { name, email, password } = req.body;
+exports.createNewUser = async (req, res, next) => {
+  try {
+    const newUser = await User.create(req.body);
 
-  const newUser = await User.create({ name, email, password });
+    if (!newUser) {
+      return res.status(404).json({
+        status: "error",
+        message: "User not created",
+      });
+    }
 
-  if (!newUser) {
-    return next(new AppError("Not able to create Account! ", 401));
-  }
-
-  res.status(200).json({
-    status: "success",
-    data: newUser,
-  });
-});
-
-exports.loginUser = catchAsync(async (req, res, next) => {
-  const { email, password } = req.body;
-
-  const user = await User.findOne({ email, password });
-
-  if (!user) {
-    return res.status(404).json({
+    res.status(200).json({
+      status: "success",
+      data: newUser,
+    });
+  } catch (err) {
+    res.status(500).json({
       status: "error",
-      message: "Invalid email or Password",
+      message: err.message,
     });
   }
-  res.status(200).json({
-    status: "success",
-    data: user,
-  });
-});
+};
+
+exports.loginUser = async (req, res, next) => {
+  try {
+    const { phone, password } = req.body;
+
+    const user = await User.findOne({ phone, password });
+
+    if (!user) {
+      return res.status(404).json({
+        status: "error",
+        message: "Invalid email or Password",
+      });
+    }
+
+    user.isActive = true;
+    await user.save({ validateBeforeSave: false });
+
+    res.status(200).json({
+      status: "success",
+      data: user,
+    });
+  } catch (err) {
+    res.status(500).json({
+      status: "error",
+      message: err.message,
+    });
+  }
+};
+
+exports.logOut = async (rwq, res, next) => {
+  try {
+    const user = await User.findById(req.user._id);
+    user.isActive = false;
+
+    await user.save({ validateBeforeSave: false });
+
+    res.status(200).json({
+      status: "success",
+      message: "User logged out successfully",
+    });
+  } catch (err) {
+    res.status(500).json({
+      status: "error",
+      message: err.message,
+    });
+  }
+};
+
+exports.updateUser = async (req, res, next) => {
+  try {
+    const updateUser = await User.findByIdAndUpdate(
+      req.params.userId,
+      req.body,
+      {
+        new: true,
+      }
+    );
+
+    if (!updateUser) {
+      return res.status(404).json({
+        status: "fail",
+        message: "Transaction not found",
+      });
+    }
+
+    res.status(200).json({
+      status: "success",
+      message: "Updated the transaction",
+      data: updateUser,
+    });
+  } catch (err) {
+    res.status(500).json({
+      status: "error",
+      message: err.message,
+    });
+  }
+};

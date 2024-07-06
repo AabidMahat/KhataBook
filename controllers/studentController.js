@@ -2,110 +2,144 @@ const Student = require("../models/studentModel");
 const AppError = require("../utils/appError");
 
 exports.getStudent = async (req, res, next) => {
-  const { accountId } = req.params;
-  const account_id = accountId.split("=")[1];
-  console.log(account_id);
-  const students = await Student.find({
-    account_id,
-  });
+  try {
+    const { accountId } = req.params;
+    const account_id = accountId.split("=")[1];
+    console.log(account_id);
+    const students = await Student.find({
+      account_id,
+    });
 
-  if (!students) {
-    console.log("Hello");
-    res.status(404).json({
+    if (!students) {
+      console.log("Hello");
+      res.status(404).json({
+        status: "error",
+        message: "No user to this account",
+      });
+    }
+
+    res.status(200).json({
+      status: "success",
+      message: "User founded",
+      length: students.length,
+      data: students,
+    });
+  } catch (err) {
+    res.status(500).json({
       status: "error",
-      message: "No user to this account",
+      message: err.message,
     });
   }
-
-  res.status(200).json({
-    status: "success",
-    message: "User founded",
-    length: students.length,
-    data: students,
-  });
 };
 
 exports.updateMe = async (req, res, next) => {
-  console.log(req.body);
-  //@ update the user
-  const { studentId } = req.params;
-  const updateData = await Student.findByIdAndUpdate(
-    studentId,
-    {
-      student_name: req.body.name,
-      phone: req.body.phone,
-      address: req.body.address,
-      imagePath: req.body.imagePath,
-    },
-    {
-      runValidators: true,
-      new: true,
-    }
-  );
+  try {
+    //@ update the user
+    const { studentId } = req.params;
+    const updateData = await Student.findByIdAndUpdate(
+      studentId,
+      {
+        student_name: req.body.name,
+        phone: req.body.phone,
+        address: req.body.address,
+        imagePath: req.body.imagePath,
+      },
+      {
+        runValidators: true,
+        new: true,
+      }
+    );
 
-  if (!updateData) {
-    res.status(404).json({
+    if (!updateData) {
+      res.status(404).json({
+        status: "error",
+        message: "Error while modifing the data",
+      });
+    }
+
+    res.status(200).json({
+      status: "success",
+      message: "Data Modified",
+      data: updateData,
+    });
+  } catch (err) {
+    res.status(500).json({
       status: "error",
-      message: "Error while modifing the data",
+      message: err.message,
     });
   }
-
-  res.status(200).json({
-    status: "success",
-    message: "Data Modified",
-    data: updateData,
-  });
 };
 
 exports.deleteStudent = async (req, res, next) => {
-  const { studentId } = req.params;
-  const deleteData = await Student.findByIdAndDelete(studentId);
-  if (!deleteData) {
-    return res.status(404).json({
+  try {
+    const { studentId } = req.params;
+    const deleteData = await Student.findByIdAndDelete(studentId);
+    if (!deleteData) {
+      return res.status(404).json({
+        status: "error",
+        message: "Error while deleting the data",
+      });
+    }
+    res.status(200).json({
+      status: 200,
+    });
+  } catch (err) {
+    res.status(500).json({
       status: "error",
-      message: "Error while deleting the data",
+      message: err.message,
     });
   }
-  res.status(200).json({
-    status: 200,
-  });
 };
 
 exports.createStudent = async (req, res, next) => {
-  const student = await Student.create(req.body);
+  try {
+    const student = await Student.create(req.body);
 
-  if (!student) {
-    return res.status(404).json({
+    if (!student) {
+      return res.status(404).json({
+        status: "error",
+        message: "Error while creating student",
+      });
+    }
+    res.status(200).json({
+      status: "success",
+      message: "Student Created",
+      data: student,
+    });
+  } catch (err) {
+    res.status(500).json({
       status: "error",
-      message: "Error while creating student",
+      message: err.message,
     });
   }
-  res.status(200).json({
-    status: "success",
-    message: "Student Created",
-    data: student,
-  });
 };
 
 exports.getSingleStudent = async (req, res, next) => {
-  const { studentId } = req.params;
-  const _id = studentId.split("=")[1];
+  try {
+    const { studentId } = req.params;
+    const _id = studentId.split("=")[1];
 
-  const student = await Student.find({
-    _id: _id,
-  });
+    const student = await Student.find({
+      _id: _id,
+    });
 
-  if (!student) {
-    return res.status(404).json({
+    if (!student) {
+      return res.status(404).json({
+        status: "error",
+        message: "Error while Finding student",
+      });
+    }
+    res.status(200).json({
+      status: "success",
+      message: "Data Found",
+      data: student,
+    });
+  } catch (err) {
+    res.status(500).json({
       status: "error",
-      message: "Error while Finding student",
+      message: err.message,
     });
   }
-  res.status(200).json({
-    status: "success",
-    message: "Data Found",
-    data: student,
-  });
 };
 
 exports.updateAmount = async (req, res, next) => {
@@ -130,6 +164,9 @@ exports.updateAmount = async (req, res, next) => {
       data: updateData,
     });
   } catch (err) {
-    console.log(err);
+    res.status(500).json({
+      status: "error",
+      message: err.message,
+    });
   }
 };

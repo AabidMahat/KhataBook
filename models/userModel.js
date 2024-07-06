@@ -4,31 +4,49 @@ const validator = require("validator");
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: [true, "Please provide class name"],
-    unique: true, // Ensure the class name is unique
-    validate: {
-      validator: async function (value) {
-        const count = await this.model("Class").countDocuments({
-          class_name: value,
-        });
-        return count === 0;
-      },
-      message: "Class name already exists",
-    },
+    required: [true, "Please provide Name"],
   },
   email: {
     type: String,
-    required: [true, "Please provide class email"],
-    unique: true, // Ensure the class email is unique
+    required: [true, "Please provide email"],
+    unique: true, // Ensure the class= email is unique
     validate: {
       validator: validator.isEmail,
       message: "Please provide a valid email",
     },
   },
+  phone: {
+    type: String,
+    required: [true, "Please provide phone"],
+    unique: true, // Ensure the class phone is unique
+    validate: {
+      validator: validator.isMobilePhone,
+      message: "Please provide a valid phone number",
+    },
+  },
   password: {
     type: String,
-    required: [true, "Please provide class password"],
+    required: [true, "Please provide password"],
     minLength: [8, "Password must be at least 8 characters long"],
+  },
+  confirmPassword: {
+    type: String,
+    required: [true, "Please provide password"],
+    validate: {
+      validator: function (value) {
+        return value === this.password;
+      },
+      message: "Passwords do not match",
+    },
+  },
+  imagePath: {
+    type: String,
+    default: "default.jpg",
+  },
+
+  isActive: {
+    type: Boolean,
+    default: false,
   },
 
   account_id: {

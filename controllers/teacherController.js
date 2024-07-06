@@ -2,41 +2,55 @@ const Teacher = require("./../models/teacherModel");
 const catchAsync = require("./../utils/catchAsync");
 
 exports.getAllTeachers = catchAsync(async (req, res, next) => {
-  const { account_no } = req.params;
-  const account_id = account_no.split("=")[1];
-  // console.log(account_id);
-  const teachers = await Teacher.find({
-    account_no: account_id,
-  }).select("+teacher_name");
+  try {
+    const { account_no } = req.params;
+    const account_id = account_no.split("=")[1];
+    // console.log(account_id);
+    const teachers = await Teacher.find({
+      account_no: account_id,
+    }).select("+teacher_name");
 
-  if (!teachers) {
-    return res.status(404).json({
+    if (!teachers) {
+      return res.status(404).json({
+        status: "error",
+        message: "No teacher to this account",
+      });
+    }
+
+    res.status(200).json({
+      status: "success",
+      message: "User founded",
+      length: teachers.length,
+      data: teachers,
+    });
+  } catch (err) {
+    res.status(500).json({
       status: "error",
-      message: "No teacher to this account",
+      message: err.message,
     });
   }
-
-  res.status(200).json({
-    status: "success",
-    message: "User founded",
-    length: teachers.length,
-    data: teachers,
-  });
 });
 
 exports.getTeacher = async (req, res, next) => {
-  const teacher = await Teacher.findById(req.params.id);
-  //Patient.findOne({_id:req.params.id})
+  try {
+    const teacher = await Teacher.findById(req.params.id);
+    //Patient.findOne({_id:req.params.id})
 
-  if (!teacher) {
-    return next(new AppError("No teacher found", 404));
+    if (!teacher) {
+      return next(new AppError("No teacher found", 404));
+    }
+    res.status(200).json({
+      status: "success",
+      data: {
+        teacher,
+      },
+    });
+  } catch (err) {
+    res.status(500).json({
+      status: "error",
+      message: err.message,
+    });
   }
-  res.status(200).json({
-    status: "success",
-    data: {
-      teacher,
-    },
-  });
 };
 
 exports.createTeacher = catchAsync(async (req, res, next) => {
@@ -57,39 +71,56 @@ exports.createTeacher = catchAsync(async (req, res, next) => {
       },
     });
   } catch (err) {
-    console.log(err);
+    res.status(500).json({
+      status: "error",
+      message: err.message,
+    });
   }
 });
 
 exports.updateTeacher = catchAsync(async (req, res, next) => {
-  const teacher = await Teacher.findByIdAndUpdate(
-    req.params.teacherId,
-    req.body,
-    {
-      new: true,
-      runValidators: true,
-    }
-  );
+  try {
+    const teacher = await Teacher.findByIdAndUpdate(
+      req.params.teacherId,
+      req.body,
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
 
-  if (!teacher) {
-    return res.status(404).json({
+    if (!teacher) {
+      return res.status(404).json({
+        status: "error",
+        message: "Error while Updating",
+      });
+    }
+    res.status(200).json({
+      status: "success",
+      data: {
+        teacher,
+      },
+    });
+  } catch (err) {
+    res.status(500).json({
       status: "error",
-      message: "Error while Updating",
+      message: err.message,
     });
   }
-  res.status(200).json({
-    status: "success",
-    data: {
-      teacher,
-    },
-  });
 });
 
 exports.deleteTeacher = catchAsync(async (req, res, next) => {
-  await Teacher.findByIdAndDelete(req.params.teacherId);
+  try {
+    await Teacher.findByIdAndDelete(req.params.teacherId);
 
-  res.status(204).json({
-    status: "delete successfully",
-    data: null,
-  });
+    res.status(204).json({
+      status: "delete successfully",
+      data: null,
+    });
+  } catch (err) {
+    res.status(500).json({
+      status: "error",
+      message: err.message,
+    });
+  }
 });

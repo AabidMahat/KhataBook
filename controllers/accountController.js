@@ -58,96 +58,124 @@ exports.createNewAccount = async (req, res, next) => {
 };
 
 exports.getAllAccount = async (req, res, next) => {
-  const { userId } = req.params;
+  try {
+    const { userId } = req.params;
 
-  const accounts = await Account.find({
-    user_id: userId,
-  });
+    const accounts = await Account.find({
+      user_id: userId,
+    });
 
-  if (!accounts) {
-    return res.status(404).json({
+    if (!accounts) {
+      return res.status(404).json({
+        status: "Failed",
+        message: "No account founded",
+      });
+    }
+
+    // Send a successful response for account creation
+    res.status(200).json({
+      status: "Success",
+      message: "Fetched All account",
+      data: {
+        account: accounts,
+      },
+    });
+  } catch (err) {
+    res.status(500).json({
       status: "Failed",
-      message: "No account founded",
+      message: err.message,
     });
   }
-
-  // Send a successful response for account creation
-  res.status(200).json({
-    status: "Success",
-    message: "Fetched All account",
-    data: {
-      account: accounts,
-    },
-  });
 };
 exports.getAdminAccount = async (req, res, next) => {
-  const accounts = await Account.find();
+  try {
+    const accounts = await Account.find();
 
-  if (!accounts) {
-    return res.status(404).json({
-      status: "Failed",
-      message: "No account founded",
+    if (!accounts) {
+      return res.status(404).json({
+        status: "Failed",
+        message: "No account founded",
+      });
+    }
+
+    // Send a successful response for account creation
+    res.status(200).json({
+      status: "Success",
+      message: "Fetched All account",
+      data: {
+        account: accounts,
+      },
+    });
+  } catch (err) {
+    res.status(500).json({
+      status: "error",
+      message: err.message,
     });
   }
-
-  // Send a successful response for account creation
-  res.status(200).json({
-    status: "Success",
-    message: "Fetched All account",
-    data: {
-      account: accounts,
-    },
-  });
 };
 
 exports.getAccount = async (req, res, next) => {
-  const { account_id } = req.params;
+  try {
+    const { account_id } = req.params;
 
-  const _id = account_id.split("=")[1];
+    const _id = account_id.split("=")[1];
 
-  const account = await Account.findById({
-    _id,
-  });
+    const account = await Account.findById({
+      _id,
+    });
 
-  if (!account) {
-    return res.status(404).json({
+    if (!account) {
+      return res.status(404).json({
+        status: "error",
+        message: "No account founded",
+      });
+    }
+
+    // Send a successful response for account creation
+    res.status(200).json({
+      status: "Success",
+      message: "Fetched All account",
+      data: {
+        account: account,
+      },
+    });
+  } catch (err) {
+    res.status(500).json({
       status: "error",
-      message: "No account founded",
+      message: err.message,
     });
   }
-
-  // Send a successful response for account creation
-  res.status(200).json({
-    status: "Success",
-    message: "Fetched All account",
-    data: {
-      account: account,
-    },
-  });
 };
 
 exports.updateAccount = async (req, res, next) => {
-  const updateAccount = await Account.findByIdAndUpdate(
-    req.params.account_id,
-    req.body,
-    {
-      new: true,
-      runValidators: true,
+  try {
+    const updateAccount = await Account.findByIdAndUpdate(
+      req.params.account_id,
+      req.body,
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+    if (!updateAccount) {
+      return res.status(404).json({
+        status: "error",
+        message: "Error while updating account",
+      });
     }
-  );
-  if (!updateAccount) {
-    return res.status(404).json({
+
+    // Send a successful response for account creation
+    res.status(200).json({
+      status: "Success",
+      message: "Account updated",
+      data: {
+        account: updateAccount,
+      },
+    });
+  } catch (err) {
+    res.status(500).json({
       status: "error",
-      message: "Error while updating account",
+      message: err.message,
     });
   }
-
-  // Send a successful response for account creation
-  res.status(200).json({
-    status: "Success",
-    message: "Account updated",
-    data: {
-      account: updateAccount,
-    },
-  });
 };
