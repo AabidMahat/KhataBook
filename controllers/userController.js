@@ -74,7 +74,7 @@ exports.logOut = async (rwq, res, next) => {
 
 exports.getUser = async (req, res, next) => {
   try {
-    const user = await User.findById(req.user.userId);
+    const user = await User.findById(req.params.userId);
     if (!user) {
       return res.status(404).json({
         status: "error",
