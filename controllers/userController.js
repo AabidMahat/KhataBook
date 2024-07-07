@@ -55,7 +55,7 @@ exports.loginUser = async (req, res, next) => {
 
 exports.logOut = async (rwq, res, next) => {
   try {
-    const user = await User.findById(req.user._id);
+    const user = await User.findById(req.params.userId);
     user.isActive = false;
 
     await user.save({ validateBeforeSave: false });
