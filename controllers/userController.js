@@ -53,7 +53,7 @@ exports.loginUser = async (req, res, next) => {
   }
 };
 
-exports.logOut = async (rwq, res, next) => {
+exports.logOut = async (req, res, next) => {
   try {
     const user = await User.findById(req.params.userId);
     user.isActive = false;
