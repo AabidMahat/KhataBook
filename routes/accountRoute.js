@@ -12,6 +12,6 @@ router
   .patch(accountController.updateAccount);
 
 router
-  .route("/getAccountByStaff/:staffNumber")
+  .route("/getAccountByStaff/:staffId")
   .get(accountController.getAccountByStaffNumber);
 module.exports = router;

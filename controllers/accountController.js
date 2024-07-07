@@ -90,13 +90,10 @@ exports.getAllAccount = async (req, res, next) => {
 
 exports.getAccountByStaffNumber = async (req, res, next) => {
   try {
-    const { staffNumber } = req.params;
-
+    const { staffId } = req.params;
     const accounts = await Account.find({
-      staff_number: {
-        $in: staffNumber,
-      },
-    });
+      staff_Id: staffId,
+    }).populate("staff_Id");
     if (!accounts) {
       return res.status(404).json({
         status: "Failed",
@@ -108,9 +105,7 @@ exports.getAccountByStaffNumber = async (req, res, next) => {
     res.status(200).json({
       status: "Success",
       message: "Fetched All account",
-      data: {
-        account: accounts,
-      },
+      data: accounts,
     });
   } catch (err) {
     res.status(500).json({
