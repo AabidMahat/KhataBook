@@ -6,6 +6,7 @@ exports.createNewStaff = async (req, res, next) => {
     const { staff_name, staff_number, staff_access } = req.body;
     const { accountId } = req.params;
     let account_no = accountId.split("=")[1];
+
     const staffPassword = `${staff_name.split(" ")[0]}@${staff_number.slice(
       0,
       3
@@ -19,6 +20,13 @@ exports.createNewStaff = async (req, res, next) => {
       staffPassword,
       account_no,
     });
+
+    // Update Account model with staff_number
+    const account = await Account.findOneAndUpdate(
+      { _id: account_no }, // Adjust this query based on your actual logic
+      { $push: { staff_number } },
+      { new: true, runValidators: false } // Adjust options as needed
+    );
 
     if (!staff) {
       res.status(404).json({
@@ -42,7 +50,7 @@ exports.createNewStaff = async (req, res, next) => {
 exports.staffLogin = async (req, res, next) => {
   try {
     const { staff_number, staffPassword } = req.body;
-    const staff = await Staff.findOne({ staff_number, staffPassword });
+    const staff = await Staff.findOne({ staff_number });
 
     if (!staff) {
       return res.status(404).json({

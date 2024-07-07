@@ -87,6 +87,39 @@ exports.getAllAccount = async (req, res, next) => {
     });
   }
 };
+
+exports.getAccountByStaffNumber = async (req, res, next) => {
+  try {
+    const { staffNumber } = req.params;
+
+    const accounts = await Account.find({
+      staff_number: {
+        $in: staffNumber,
+      },
+    });
+    if (!accounts) {
+      return res.status(404).json({
+        status: "Failed",
+        message: "No account founded",
+      });
+    }
+
+    // Send a successful response for account creation
+    res.status(200).json({
+      status: "Success",
+      message: "Fetched All account",
+      data: {
+        account: accounts,
+      },
+    });
+  } catch (err) {
+    res.status(500).json({
+      status: "Failed",
+      message: err.message,
+    });
+  }
+};
+
 exports.getAdminAccount = async (req, res, next) => {
   try {
     const accounts = await Account.find();

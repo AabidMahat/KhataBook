@@ -18,6 +18,11 @@ const accountSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Staff",
   },
+
+  staff_number: {
+    type: ["String"],
+  },
+
   isActive: Boolean,
 
   user_id: {
