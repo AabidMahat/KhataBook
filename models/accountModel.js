@@ -19,9 +19,8 @@ const accountSchema = new mongoose.Schema({
     ref: "Staff",
   },
 
-  staff_Id: {
-    type: [mongoose.Schema.Types.ObjectId],
-    ref: "Staff",
+  staff_number: {
+    type: ["String"],
   },
 
   isActive: Boolean,

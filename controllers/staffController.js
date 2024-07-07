@@ -24,7 +24,7 @@ exports.createNewStaff = async (req, res, next) => {
     // Update Account model with staff_number
     const account = await Account.findOneAndUpdate(
       { _id: account_no }, // Adjust this query based on your actual logic
-      { $push: { staff_Id: staff._id } },
+      { $push: { staff_number } },
       { new: true, runValidators: false } // Adjust options as needed
     );
 

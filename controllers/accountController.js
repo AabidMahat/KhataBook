@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const Account = require("../models/accountModel");
 const User = require("../models/userModel");
+const Staff = require("../models/staffModel");
 
 exports.createNewAccount = async (req, res, next) => {
   try {
@@ -90,22 +91,34 @@ exports.getAllAccount = async (req, res, next) => {
 
 exports.getAccountByStaffNumber = async (req, res, next) => {
   try {
-    const { staffId } = req.params;
-    const accounts = await Account.find({
-      staff_Id: staffId,
-    }).populate("staff_Id");
-    if (!accounts) {
+    const { staffNumber } = req.params;
+
+    // Find staff by staff_number and populate related accounts
+    const staff = await Staff.findOne({ staff_number: staffNumber });
+
+    if (!staff) {
       return res.status(404).json({
         status: "Failed",
-        message: "No account founded",
+        message: "Staff not found",
       });
     }
 
-    // Send a successful response for account creation
+    // Populate accounts related to the staff
+    const accounts = await Account.find({ _id: staff.account_no });
+
+    if (!accounts || accounts.length === 0) {
+      return res.status(404).json({
+        status: "Failed",
+        message: "No accounts found for this staff",
+      });
+    }
+
+    // Send successful response with staff access and accounts data
     res.status(200).json({
       status: "Success",
-      message: "Fetched All account",
-      data: accounts,
+      message: "Fetched accounts successfully",
+      staff_access: staff.staff_access,
+      accounts: accounts,
     });
   } catch (err) {
     res.status(500).json({
@@ -114,7 +127,6 @@ exports.getAccountByStaffNumber = async (req, res, next) => {
     });
   }
 };
-
 exports.getAdminAccount = async (req, res, next) => {
   try {
     const accounts = await Account.find();
