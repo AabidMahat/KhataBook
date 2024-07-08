@@ -60,21 +60,21 @@ exports.staffLogin = async (req, res, next) => {
     }
 
     // Prepare the response data excluding staffId
-    const responseData = {
-      staff_name: staff.staff_name,
-      staff_number: staff.staff_number,
-      staff_access: staff.staff_access,
-      books: staff.books,
-      account: {
-        account_name: staff.account_no.account_name,
-        isActive: staff.account_no.isActive,
-        user_id: staff.account_no.user_id,
-      },
-    };
+    // const responseData = {
+    //   staff_name: staff.staff_name,
+    //   staff_number: staff.staff_number,
+    //   staff_access: staff.staff_access,
+    //   books: staff.books,
+    //   account: {
+    //     account_name: staff.account_no.account_name,
+    //     isActive: staff.account_no.isActive,
+    //     user_id: staff.account_no.user_id,
+    //   },
+    // };
 
     res.status(201).json({
       status: "success",
-      data: responseData,
+      data: staff,
     });
   } catch (err) {
     res.status(404).json({
