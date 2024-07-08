@@ -92,10 +92,11 @@ exports.getAllAccount = async (req, res, next) => {
 exports.getAccountByStaffNumber = async (req, res, next) => {
   try {
     const { staffId } = req.params;
+    console.log(staffId);
 
-    const accounts = await Account.find({ staff_id: staffId })
-      .populate("staff_id")
-      .select("+ staff_number staff_access");
+    const accounts = await Account.find({
+      staffId: { $in: [staffId] },
+    }).populate("staffId");
 
     if (!accounts) {
       return res.status(404).json({

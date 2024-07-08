@@ -29,18 +29,6 @@ exports.createNewStaff = async (req, res, next) => {
       { new: true, runValidators: false } // Adjust options as needed
     );
 
-    // const accountData = await Account.findById(account_no);
-
-    // await Account.create({
-    //   account_name: accountData.account_name,
-    //   student: accountData.student,
-    //   teacher: accountData.teacher,
-    //   user_id: accountData.user_id,
-    //   staff_number,
-    //   staff_access,
-    //   isActive: true,
-    // });
-
     if (!staff) {
       res.status(404).json({
         status: "Error",
