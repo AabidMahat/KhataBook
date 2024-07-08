@@ -3,8 +3,6 @@ const mongoose = require("mongoose");
 const accountSchema = new mongoose.Schema({
   account_name: {
     type: "String",
-    required: [true, "Must enter the account name"],
-    unique: true,
   },
   student: {
     type: mongoose.Schema.Types.ObjectId,
@@ -19,8 +17,16 @@ const accountSchema = new mongoose.Schema({
     ref: "Staff",
   },
 
-  staff_number: {
-    type: ["String"],
+  // staff_number: {
+  //   type: "String",
+  // },
+  // staff_access: {
+  //   type: String,
+  //   default: "",
+  // },
+  staffId: {
+    type: [mongoose.Schema.Types.ObjectId],
+    ref: "Staff",
   },
 
   isActive: Boolean,

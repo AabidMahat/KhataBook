@@ -22,11 +22,24 @@ exports.createNewStaff = async (req, res, next) => {
     });
 
     // Update Account model with staff_number
+
     const account = await Account.findOneAndUpdate(
       { _id: account_no }, // Adjust this query based on your actual logic
-      { $push: { staff_number } },
+      { $push: { staffId: staff._id } },
       { new: true, runValidators: false } // Adjust options as needed
     );
+
+    // const accountData = await Account.findById(account_no);
+
+    // await Account.create({
+    //   account_name: accountData.account_name,
+    //   student: accountData.student,
+    //   teacher: accountData.teacher,
+    //   user_id: accountData.user_id,
+    //   staff_number,
+    //   staff_access,
+    //   isActive: true,
+    // });
 
     if (!staff) {
       res.status(404).json({
