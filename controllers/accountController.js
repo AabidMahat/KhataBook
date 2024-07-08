@@ -89,34 +89,34 @@ exports.getAllAccount = async (req, res, next) => {
   }
 };
 
-// exports.getAccountByStaffNumber = async (req, res, next) => {
-//   try {
-//     const { staffId } = req.params;
+exports.getAccountByStaffNumber = async (req, res, next) => {
+  try {
+    const { staffId } = req.params;
 
-//     const accounts = await Account.find({ staff_id: staffId })
-//       .populate("staff_id")
-//       .select("+ staff_number staff_access");
+    const accounts = await Account.find({ staff_id: staffId })
+      .populate("staff_id")
+      .select("+ staff_number staff_access");
 
-//     if (!accounts) {
-//       return res.status(404).json({
-//         status: "Failed",
-//         message: "No accounts found for this staff",
-//       });
-//     }
+    if (!accounts) {
+      return res.status(404).json({
+        status: "Failed",
+        message: "No accounts found for this staff",
+      });
+    }
 
-//     // Send successful response with staff access and accounts data
-//     res.status(200).json({
-//       status: "Success",
-//       message: "Fetched accounts successfully",
-//       accounts: accounts,
-//     });
-//   } catch (err) {
-//     res.status(500).json({
-//       status: "Failed",
-//       message: err.message,
-//     });
-//   }
-// };
+    // Send successful response with staff access and accounts data
+    res.status(200).json({
+      status: "Success",
+      message: "Fetched accounts successfully",
+      accounts: accounts,
+    });
+  } catch (err) {
+    res.status(500).json({
+      status: "Failed",
+      message: err.message,
+    });
+  }
+};
 exports.getAdminAccount = async (req, res, next) => {
   try {
     const accounts = await Account.find();
