@@ -50,9 +50,8 @@ exports.createNewStaff = async (req, res, next) => {
 
 exports.staffLogin = async (req, res, next) => {
   try {
-    const { staff_number, staffPassword } = req.body;
-    const staff = await Staff.findOne({ staff_number });
-
+    const { staff_number } = req.body;
+    const staff = await Staff.findOne({ staff_number }).populate("account_no");
     if (!staff) {
       return res.status(404).json({
         status: "Error",
