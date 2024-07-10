@@ -10,12 +10,10 @@ const transactionSchema = new mongoose.Schema(
     amount: {
       type: Number,
       required: [true, "Amount is required"],
-      min: [0, "Amount cannot be negative"],
     },
     pendingAmount: {
       type: Number,
       required: [true, "Pending amount is required"],
-      min: [0, "Pending amount cannot be negative"],
     },
 
     student_id: {
