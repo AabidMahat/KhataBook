@@ -14,4 +14,8 @@ router
 router
   .route("/getAccountByStaff/:staffId")
   .get(accountController.getAccountByStaffNumber);
+
+router
+  .route("/deleteAccount/:accountId")
+  .delete(accountController.deleteAccount);
 module.exports = router;

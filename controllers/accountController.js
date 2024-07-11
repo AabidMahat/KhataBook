@@ -1,6 +1,8 @@
 const mongoose = require("mongoose");
 const Account = require("../models/accountModel");
 const User = require("../models/userModel");
+const Student = require("../models/studentModel");
+const Transaction = require("../models/transactionModel");
 const Staff = require("../models/staffModel");
 
 exports.createNewAccount = async (req, res, next) => {
@@ -202,6 +204,42 @@ exports.updateAccount = async (req, res, next) => {
       data: {
         account: updateAccount,
       },
+    });
+  } catch (err) {
+    res.status(500).json({
+      status: "error",
+      message: err.message,
+    });
+  }
+};
+
+exports.deleteAccount = async (req, res, next) => {
+  try {
+    // find the student
+    const students = await Student.find({ account_id: req.params.accountId });
+
+    // Collect student IDs to find related transactions
+    const studentIds = students.map((student) => student._id);
+
+    await Account.findByIdAndDelete(req.params.accountId);
+
+    // Delete all transactions related to those students
+    await Transaction.deleteMany({ student_id: { $in: studentIds } });
+
+    // Delete all students related to the account
+    await Student.deleteMany({ accountId: req.params.accountId });
+
+    // Delete the account
+    await Account.findByIdAndDelete(req.params.accountId);
+
+    res.status(200).json({
+      status: "Success",
+      message: "Data deleted successfully",
+    });
+
+    res.status(200).json({
+      status: "Success",
+      message: "Data deleted successfully",
     });
   } catch (err) {
     res.status(500).json({
