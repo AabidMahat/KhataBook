@@ -13,4 +13,8 @@ router
 
 router.route("/getAllStaff/:accountId").get(staffController.getAllStaff);
 
+router.route("/updateStaff/:staffId").patch(staffController.updateStaff);
+
+router.route("/deleteStaff/:staffId").delete(staffController.deleteStaff);
+
 module.exports = router;

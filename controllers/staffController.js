@@ -117,3 +117,44 @@ exports.getAllStaff = async (req, res, next) => {
     });
   }
 };
+
+exports.deleteStaff = async (req, res, next) => {
+  try {
+    await Staff.findByIdAndDelete(req.params.staffId);
+    res.status(200).json({
+      status: "success",
+      message: "Staff deleted successfully",
+    });
+  } catch (err) {
+    res.status(404).json({
+      status: "Error",
+      message: err,
+    });
+  }
+};
+
+exports.updateStaff = async (req, res, next) => {
+  try {
+    const staff = await Staff.findByIdAndUpdate(req.params.staffId, req.body, {
+      new: true,
+      runValidators: false,
+    });
+
+    if (!staff) {
+      return res.status(404).json({
+        status: "Error",
+        message: "Staff Not found",
+      });
+    }
+
+    res.status(200).json({
+      status: "success",
+      data: staff,
+    });
+  } catch (err) {
+    res.status(404).json({
+      status: "Error",
+      message: err,
+    });
+  }
+};
