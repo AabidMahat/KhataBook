@@ -11,4 +11,6 @@ router
   .route("/staffAccount/:staff_id")
   .get(staffController.getAccountBasedStaff);
 
+router.route("/getAllStaff/:accountId").get(staffController.getAllStaff);
+
 module.exports = router;

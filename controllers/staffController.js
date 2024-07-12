@@ -58,20 +58,6 @@ exports.staffLogin = async (req, res, next) => {
         message: "Not able to create staff",
       });
     }
-
-    // Prepare the response data excluding staffId
-    // const responseData = {
-    //   staff_name: staff.staff_name,
-    //   staff_number: staff.staff_number,
-    //   staff_access: staff.staff_access,
-    //   books: staff.books,
-    //   account: {
-    //     account_name: staff.account_no.account_name,
-    //     isActive: staff.account_no.isActive,
-    //     user_id: staff.account_no.user_id,
-    //   },
-    // };
-
     res.status(201).json({
       status: "success",
       data: staff,
@@ -100,6 +86,29 @@ exports.getAccountBasedStaff = async (req, res, next) => {
     res.status(200).json({
       status: "success",
       data: { account: staff.account_no },
+    });
+  } catch (err) {
+    res.status(404).json({
+      status: "Error",
+      message: err,
+    });
+  }
+};
+
+exports.getAllStaff = async (req, res, next) => {
+  try {
+    const staff = await Staff.find({
+      account_no: req.params.accountId,
+    });
+    if (!staff) {
+      return res.status(404).json({
+        status: "Error",
+        message: "Staff Not found",
+      });
+    }
+    res.status(200).json({
+      status: "success",
+      data: staff,
     });
   } catch (err) {
     res.status(404).json({
