@@ -2,6 +2,12 @@ const User = require("../models/userModel");
 const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
 
+const accountSID = process.env.TWILIO_SID;
+const accountAuth = process.env.TWILIO_TOKEN;
+const accountNum = process.env.TWILIO_NUMBER;
+
+const client = require("twilio")(accountSID, accountAuth);
+
 exports.createNewUser = async (req, res, next) => {
   try {
     const newUser = await User.create(req.body);
@@ -136,6 +142,8 @@ exports.forgetPassword = async (req, res, next) => {
     await user.createOtp();
     await user.save({ validateBeforeSave: false });
 
+    await sendOtp(user.otp, user.phone);
+
     res.status(200).json({
       status: "success",
       message: "Verify the otp",
@@ -178,4 +186,19 @@ exports.resetPassword = async (req, res, next) => {
     message: "Password Updated Successfully",
     data: user,
   });
+};
+
+const sendOtp = async (otp, userNum) => {
+  let msgOption = {
+    from: accountNum,
+    to: "+91" + userNum,
+    body: "Your OTP is " + otp,
+  };
+
+  try {
+    await client.send(msgOption);
+    console.log("Message sent successfully");
+  } catch (err) {
+    console.log("Error while sending message", err);
+  }
 };
