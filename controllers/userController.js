@@ -196,7 +196,7 @@ const sendOtp = async (otp, userNum) => {
   };
 
   try {
-    await client.send(msgOption);
+    await client.messages.create(msgOption);
     console.log("Message sent successfully");
   } catch (err) {
     console.log("Error while sending message", err);
