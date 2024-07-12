@@ -123,3 +123,59 @@ exports.updateUser = async (req, res, next) => {
     });
   }
 };
+
+exports.forgetPassword = async (req, res, next) => {
+  try {
+    const user = await User.findOne({ phone: req.body.phone });
+    if (!user) {
+      return res.status(404).json({
+        status: "fail",
+        message: "No User with this number",
+      });
+    }
+    await user.createOtp();
+    await user.save({ validateBeforeSave: false });
+
+    res.status(200).json({
+      status: "success",
+      message: "Verify the otp",
+    });
+  } catch (err) {
+    res.status(500).json({
+      status: "error",
+      message: err.message,
+    });
+  }
+};
+
+exports.resetPassword = async (req, res, next) => {
+  console.log("Received OTP:", req.body.otp);
+  console.log("Current Time:", Date.now());
+
+  const user = await User.findOne({
+    otp: req.body.otp,
+    otpExpires: {
+      $gt: Date.now(),
+    },
+  });
+
+  if (!user) {
+    return res.status(404).json({
+      status: "fail",
+      message: "Otp is expired or inValid",
+    });
+  }
+  user.password = req.body.password;
+  user.confirmPassword = req.body.confirmPassword;
+
+  user.otp = undefined;
+  user.otpExpires = undefined;
+
+  await user.save({ validateBeforeSave: false });
+
+  res.status(200).json({
+    status: "success",
+    message: "Password Updated Successfully",
+    data: user,
+  });
+};

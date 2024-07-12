@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const validator = require("validator");
+const otpGenerator = require("otp-generator");
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -53,7 +54,28 @@ const userSchema = new mongoose.Schema({
     type: [mongoose.Schema.Types.ObjectId],
     ref: "Account",
   },
+
+  otp: Number,
+  otpExpires: Date,
 });
+
+userSchema.methods.createOtp = async function () {
+  const otp = otpGenerator.generate(6, {
+    digits: true,
+    lowerCaseAlphabets: false,
+    upperCaseAlphabets: false,
+    specialChars: false,
+  });
+
+  this.otp = otp;
+  this.otpExpires = Date.now() + 5 * 60 * 1000;
+
+  console.log(this.otpExpires);
+};
+
+userSchema.methods.otpExpired = function () {
+  return this.otpExpires < Date.now();
+};
 
 const User = mongoose.model("User", userSchema);
 

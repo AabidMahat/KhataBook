@@ -12,4 +12,8 @@ router.route("/getUser/:userId").get(userController.getUser);
 
 router.route("/updateUser/:userId").patch(userController.updateUser);
 
+router.route("/forgetPassword").post(userController.forgetPassword);
+
+router.route("/resetPassword").patch(userController.resetPassword);
+
 module.exports = router;
