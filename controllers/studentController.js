@@ -1,4 +1,5 @@
 const Student = require("../models/studentModel");
+const Transaction = require("../models/transactionModel");
 const AppError = require("../utils/appError");
 
 exports.getStudent = async (req, res, next) => {
@@ -74,6 +75,11 @@ exports.deleteStudent = async (req, res, next) => {
   try {
     const { studentId } = req.params;
     const deleteData = await Student.findByIdAndDelete(studentId);
+
+    await Transaction.deleteMany({
+      student_id: studentId,
+    });
+
     if (!deleteData) {
       return res.status(404).json({
         status: "error",
