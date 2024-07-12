@@ -15,7 +15,7 @@ const classSchema = new mongoose.Schema({
 
   teacherId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Teacher",
+    ref: "Staff",
   },
 
   account_no: {
