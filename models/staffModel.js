@@ -9,7 +9,6 @@ const staffSchema = new mongoose.Schema({
   staff_number: {
     type: String,
     required: [true, "Enter the phone number"],
-    unique: true,
     validate: {
       validator: function (v) {
         return validator.isMobilePhone(v, "any"); // Validates mobile phone format
