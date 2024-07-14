@@ -55,7 +55,7 @@ exports.staffLogin = async (req, res, next) => {
     if (!staff) {
       return res.status(404).json({
         status: "Error",
-        message: "Not able to create",
+        message: "Not able to create staff",
       });
     }
     res.status(201).json({
