@@ -35,6 +35,23 @@ const accountSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
   },
+  payment: {
+    upiID: {
+      type: String,
+      required: true,
+    },
+    amount: {
+      type: Number,
+      required: true,
+    },
+  },
+
+  whatsapp_template: {
+    type: String,
+  },
+  sms_template: {
+    type: String,
+  },
 });
 
 const Account = mongoose.model("Account", accountSchema);
