@@ -38,11 +38,9 @@ const accountSchema = new mongoose.Schema({
   payment: {
     upiID: {
       type: String,
-      required: true,
     },
     amount: {
       type: Number,
-      required: true,
     },
   },
 
