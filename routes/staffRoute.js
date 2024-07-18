@@ -17,4 +17,6 @@ router.route("/updateStaff/:staffId").patch(staffController.updateStaff);
 
 router.route("/deleteStaff/:staffId").delete(staffController.deleteStaff);
 
+router.route("/getStaff/:staffId").get(staffController.getStaff);
+
 module.exports = router;
