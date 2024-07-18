@@ -107,6 +107,16 @@ exports.createStudent = async (req, res, next) => {
         message: "Error while creating student",
       });
     }
+
+    if (student.total_fees > 0) {
+      await Transaction.create({
+        student_id: student._id,
+        amount: student.total_fees,
+        transactionType: "charge",
+        pendingAmount: student.total_fees,
+        account_id: req.body.account_id,
+      });
+    }
     res.status(200).json({
       status: "success",
       message: "Student Created",
