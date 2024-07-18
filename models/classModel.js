@@ -12,6 +12,9 @@ const classSchema = new mongoose.Schema({
     type: String,
     required: [true, "Please provide teacher name"],
   },
+  class_ammount: {
+    type: Number,
+  },
 
   teacherId: {
     type: mongoose.Schema.Types.ObjectId,

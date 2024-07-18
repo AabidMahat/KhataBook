@@ -16,14 +16,10 @@ const accountSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Staff",
   },
-
-  // staff_number: {
-  //   type: "String",
-  // },
-  // staff_access: {
-  //   type: String,
-  //   default: "",
-  // },
+  account_type: {
+    type: "String",
+    default: "Maktab",
+  },
   staffId: {
     type: [mongoose.Schema.Types.ObjectId],
     ref: "Staff",

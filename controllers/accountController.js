@@ -7,7 +7,7 @@ const Staff = require("../models/staffModel");
 
 exports.createNewAccount = async (req, res, next) => {
   try {
-    const { account_name, isActive, user_id } = req.body;
+    const { account_name, account_type, isActive, user_id } = req.body;
     console.log(account_name, isActive);
 
     // Check if the account already exists
@@ -23,10 +23,10 @@ exports.createNewAccount = async (req, res, next) => {
         },
       });
     }
-
     // Account doesn't exist, create a new account
     const newAccount = await Account.create({
       account_name,
+      account_type,
       isActive,
       user_id,
     });
