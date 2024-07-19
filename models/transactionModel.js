@@ -15,6 +15,13 @@ const transactionSchema = new mongoose.Schema(
       type: Number,
       required: [true, "Pending amount is required"],
     },
+    transaction_description: {
+      type: String,
+    },
+    transaction_mode: {
+      type: String,
+      default: "-",
+    },
 
     student_id: {
       type: mongoose.Schema.Types.ObjectId,

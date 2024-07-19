@@ -61,13 +61,22 @@ exports.getAllTransaction = async (req, res, next) => {
 
 exports.addAmount = async (req, res, next) => {
   try {
-    const { student_id, account_id, pendingAmount, transactionType, amount } =
-      req.body;
+    const {
+      student_id,
+      account_id,
+      pendingAmount,
+      transactionType,
+      transaction_description,
+      transaction_mode,
+      amount,
+    } = req.body;
 
     const newTransaction = await Transaction.create({
       student_id,
       account_id,
       transactionType,
+      transaction_description,
+      transaction_mode,
       amount,
       pendingAmount,
     });
