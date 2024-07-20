@@ -6,10 +6,21 @@ const Transaction = require("../models/transactionModel");
 const Staff = require("../models/staffModel");
 
 const generateAccountId = async () => {
+  // Fetch all accounts
   const accounts = await Account.find();
+
+  // Get the current year
   const currentYear = new Date().getFullYear();
+
+  // Define the prefix
   const prefix = "Mktb";
-  let nextIndex = accounts.length;
+
+  // Calculate the number of digits needed
+  const totalAccounts = accounts.length + 1;
+  const digits = Math.max(totalAccounts.toString().length, 5); // Minimum 5 digits
+  const nextIndex = totalAccounts.toString().padStart(digits, "0");
+
+  // Return the formatted account ID
   return `${prefix}-${currentYear}-${nextIndex}`;
 };
 
