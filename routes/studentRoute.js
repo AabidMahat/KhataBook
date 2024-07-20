@@ -18,4 +18,6 @@ router
 
 router.route("/updateAmount/:studentId").patch(studentController.updateAmount);
 
+router.route("/getAStudent/:studentId").get(studentController.getSingleStudent);
+
 module.exports = router;
