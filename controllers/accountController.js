@@ -5,6 +5,22 @@ const Student = require("../models/studentModel");
 const Transaction = require("../models/transactionModel");
 const Staff = require("../models/staffModel");
 
+let count = 0;
+
+const generateAccountId = async () => {
+  const currentYear = new Date().getFullYear();
+  const prefix = "mktp";
+
+  // Get the last account created in the current year to find the next index
+  const lastAccount = await Account.findOne({
+    account_id: new RegExp(`^${prefix}-${currentYear}-`),
+  }).sort({ account_id: -1 });
+
+  let nextIndex = count;
+
+  return `${prefix}-${currentYear}-${nextIndex}`;
+};
+
 exports.createNewAccount = async (req, res, next) => {
   try {
     const { account_name, account_type, isActive, user_id } = req.body;
@@ -23,8 +39,12 @@ exports.createNewAccount = async (req, res, next) => {
         },
       });
     }
+    // Generate a unique account ID
+    count++;
+    const accountId = await generateAccountId();
     // Account doesn't exist, create a new account
     const newAccount = await Account.create({
+      accountId: accountId,
       account_name,
       account_type,
       isActive,

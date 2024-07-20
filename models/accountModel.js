@@ -4,6 +4,11 @@ const accountSchema = new mongoose.Schema({
   account_name: {
     type: "String",
   },
+
+  accountId: {
+    type: "String",
+  },
+
   student: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Student",
