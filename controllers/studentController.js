@@ -1,5 +1,6 @@
 const Student = require("../models/studentModel");
 const Transaction = require("../models/transactionModel");
+const Class = require("../models/classModel");
 const AppError = require("../utils/appError");
 
 exports.getStudent = async (req, res, next) => {
@@ -37,32 +38,82 @@ exports.updateMe = async (req, res, next) => {
   try {
     //@ update the user
     const { studentId } = req.params;
-    const updateData = await Student.findByIdAndUpdate(
+
+    // Find the class information
+    const studentClass = await Class.findOne({
+      class_name: req.body.classes,
+    });
+
+    console.log(studentClass);
+
+    // Update student information
+    const updatedStudent = await Student.findByIdAndUpdate(
       studentId,
       {
         student_name: req.body.name,
         phone: req.body.phone,
         address: req.body.address,
         imagePath: req.body.imagePath,
+        classes: req.body.classes,
       },
       {
-        runValidators: true,
+        runValidators: false,
         new: true,
       }
     );
 
-    if (!updateData) {
+    // Find transactions for the student
+    const transactions = await Transaction.find({ student_id: studentId });
+
+    const firstTransaction = transactions[0];
+    const newAmount = studentClass.class_ammount;
+
+    // Update the first transaction with the new class amount
+    await Transaction.findByIdAndUpdate(
+      firstTransaction._id,
+      { amount: newAmount, pendingAmount: newAmount },
+      { new: true }
+    );
+
+    let total_fees;
+    let paid_fees = 0;
+
+    if (transactions.length === 1) {
+      // If there's only one transaction, directly set the total_fees to the new amount
+      total_fees = newAmount;
+    } else {
+      // If there are multiple transactions, calculate the fee difference
+      const feeDifference = newAmount - firstTransaction.amount;
+      total_fees = firstTransaction.amount + feeDifference;
+      paid_fees = transactions.reduce(
+        (acc, trans) => acc + (trans.paidAmount || 0),
+        0
+      );
+    }
+    // Update student fees
+    const newStudentData = await Student.findByIdAndUpdate(
+      studentId,
+      {
+        total_fees,
+        paid_fees: Math.max(paid_fees, 0), // Ensure paid_fees is not negative
+      },
+      {
+        new: true,
+        runValidators: false,
+      }
+    );
+    if (!updatedStudent) {
       res.status(404).json({
         status: "error",
-        message: "Error while modifing the data",
+        message: "Error while modifying the data",
+      });
+    } else {
+      res.status(200).json({
+        status: "success",
+        message: "Data Modified",
+        data: newStudentData,
       });
     }
-
-    res.status(200).json({
-      status: "success",
-      message: "Data Modified",
-      data: updateData,
-    });
   } catch (err) {
     res.status(500).json({
       status: "error",
