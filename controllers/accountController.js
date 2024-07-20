@@ -8,7 +8,7 @@ const Staff = require("../models/staffModel");
 const generateAccountId = async () => {
   const accounts = await Account.find();
   const currentYear = new Date().getFullYear();
-  const prefix = "mktp";
+  const prefix = "Mktb";
   let nextIndex = accounts.length;
   return `${prefix}-${currentYear}-${nextIndex}`;
 };
