@@ -124,14 +124,14 @@ exports.deleteTransaction = async (req, res, next) => {
 exports.updateTransaction = async (req, res, next) => {
   try {
     const { transactionId } = req.params;
-    const { amount, pendingAmount } = req.body;
+    // const { amount, pendingAmount } = req.body;
     const _id = transactionId.split("=")[1];
 
     console.log("Hello from backend");
 
     const updatedTransaction = await Transaction.findByIdAndUpdate(
       _id,
-      { amount, pendingAmount },
+      req.body,
       { new: true } // This option ensures that the updated document is returned
     );
 

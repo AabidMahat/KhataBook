@@ -8,6 +8,8 @@ exports.createNewClass = async (req, res, next) => {
     const class1 = await Class.create({
       class_name,
       class_ammount,
+      amount_by_time,
+      duration,
       teacher_name,
       account_no,
       teacherId,

@@ -16,6 +16,14 @@ const classSchema = new mongoose.Schema({
     type: Number,
   },
 
+  amount_by_time: {
+    type: Number,
+  },
+
+  duration: {
+    type: Number,
+  },
+
   teacherId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Staff",
