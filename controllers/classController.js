@@ -3,8 +3,15 @@ const Student = require("../models/studentModel");
 
 exports.createNewClass = async (req, res, next) => {
   try {
-    const { class_name, teacher_name, account_no, teacherId, class_ammount } =
-      req.body;
+    const {
+      class_name,
+      teacher_name,
+      account_no,
+      amount_by_time,
+      duration,
+      teacherId,
+      class_ammount,
+    } = req.body;
     const class1 = await Class.create({
       class_name,
       class_ammount,
