@@ -47,9 +47,13 @@ const accountSchema = new mongoose.Schema({
 
   whatsapp_template: {
     type: String,
+    default:
+      "Assalamualaikum,\nAap se guzarish hai ke apne bache ke Maktab ki bakiya fees jald se jald ada kar dein. Shukriya!",
   },
   sms_template: {
     type: String,
+    default:
+      "Assalamualaikum,\nAap se guzarish hai ke apne bache ke Maktab ki bakiya fees jald se jald ada kar dein. Shukriya!",
   },
 });
 
