@@ -55,6 +55,10 @@ const accountSchema = new mongoose.Schema({
     default:
       "Assalamualaikum,\nAap se guzarish hai ke apne bache ke Maktab ki bakiya fees jald se jald ada kar dein. Shukriya!",
   },
+  url_template: {
+    type: String,
+    default: "7559153594@pthdfc",
+  },
 });
 
 const Account = mongoose.model("Account", accountSchema);
