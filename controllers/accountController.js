@@ -27,21 +27,6 @@ const generateAccountId = async () => {
 exports.createNewAccount = async (req, res, next) => {
   try {
     const { account_name, account_type, isActive, user_id } = req.body;
-    console.log(account_name, isActive);
-
-    // Check if the account already exists
-    const existingAccount = await Account.findOne({ account_name });
-
-    if (existingAccount) {
-      // Account already exists, log in the account
-      return res.status(200).json({
-        status: "Success",
-        message: "Account already exists, logged in successfully",
-        data: {
-          account: existingAccount,
-        },
-      });
-    }
     const accountId = await generateAccountId();
     // Account doesn't exist, create a new account
     const newAccount = await Account.create({
