@@ -202,3 +202,31 @@ const sendOtp = async (otp, userNum) => {
     console.log("Error while sending message", err);
   }
 };
+
+exports.getAllUsers = async (req, res, next) => {
+  try {
+    const { userId } = req.params;
+    const users = await User.find({
+      user_id: userId,
+    });
+
+    if (!users) {
+      res.status(404).json({
+        status: "error",
+        message: "No user to this account",
+      });
+    }
+
+    res.status(200).json({
+      status: "success",
+      message: "User founded",
+      length: users.length,
+      data: users,
+    });
+  } catch (err) {
+    res.status(500).json({
+      status: "error",
+      message: err.message,
+    });
+  }
+};
