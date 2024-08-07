@@ -8,7 +8,7 @@ router.route("/login").post(adminController.loginAdmin);
 
 // router.route("/logOut/:userId").post(userController.logOut);
 
-router.route("/getAdmin/:userId").get(adminController.getAdmin);
+router.route("/getAdmin").get(adminController.getAdmin);
 
 router.route("/updateAdmin/:userId").patch(adminController.updateAdmin);
 
