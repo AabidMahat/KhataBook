@@ -5,6 +5,8 @@ dotenv.config({ path: "./config.env" });
 
 const app = require("./app");
 
+require("./cronJob");
+
 const DB = process.env.DATABASE_URL;
 
 mongoose

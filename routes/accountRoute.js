@@ -18,4 +18,8 @@ router
 router
   .route("/deleteAccount/:accountId")
   .delete(accountController.deleteAccount);
+
+router
+  .route("/changeActiveState/:accountId")
+  .patch(accountController.changeActiveState);
 module.exports = router;

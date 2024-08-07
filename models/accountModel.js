@@ -36,13 +36,14 @@ const accountSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
   },
-  payment: {
-    upiID: {
-      type: String,
-    },
-    amount: {
-      type: Number,
-    },
+  paymentDate: {
+    type: Date,
+    default: Date.now(),
+  },
+
+  suscribtionDate: {
+    type: Date,
+    default: () => new Date(Date.now() + 90 * 24 * 60 * 60 * 1000), // 90 days from now
   },
 
   whatsapp_template: {

@@ -249,3 +249,35 @@ exports.deleteAccount = async (req, res, next) => {
     });
   }
 };
+
+exports.changeActiveState = async (req, res, next) => {
+  console.log(req.params.accountId);
+  const { isActive, paymentDate } = req.body;
+  try {
+    const updateAccount = await Account.findByIdAndUpdate(
+      req.params.accountId,
+      {
+        isActive: isActive,
+        paymentDate: paymentDate,
+      },
+      { new: true }
+    );
+
+    if (!updateAccount) {
+      return res.status(404).json({
+        status: "error",
+        message: "Account not found",
+      });
+    }
+
+    res.status(200).json({
+      status: "Success",
+      data: updateAccount,
+    });
+  } catch (err) {
+    res.status(500).json({
+      status: "error",
+      message: err.message,
+    });
+  }
+};
