@@ -54,7 +54,7 @@ exports.loginAdmin = async (req, res, next) => {
 
 exports.getAdmin = async (req, res, next) => {
   try {
-    const admin = await Admin.findById(req.params);
+    const admin = await Admin.find();
     if (!admin) {
       return res.status(404).json({
         status: "error",
