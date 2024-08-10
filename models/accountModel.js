@@ -43,7 +43,7 @@ const accountSchema = new mongoose.Schema({
 
   suscribtionDate: {
     type: Date,
-    default: () => new Date(Date.now() + 90 * 24 * 60 * 60 * 1000), // 90 days from now
+    default: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000), // 90 days from now
   },
 
   whatsapp_template: {
