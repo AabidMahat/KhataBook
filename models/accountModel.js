@@ -60,6 +60,14 @@ const accountSchema = new mongoose.Schema({
     type: String,
     default: "7559153594@pthdfc",
   },
+  createdAt: {
+    type: Date,
+    default: Date.now(),
+  },
+  updatedAt: {
+    type: Date,
+    default: Date.now(),
+  },
 });
 
 const Account = mongoose.model("Account", accountSchema);

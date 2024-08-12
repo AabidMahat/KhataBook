@@ -259,6 +259,7 @@ exports.changeActiveState = async (req, res, next) => {
       {
         isActive: isActive,
         paymentDate: paymentDate,
+        updatedAt: Date.now(),
       },
       { new: true }
     );
