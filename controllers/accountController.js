@@ -188,23 +188,9 @@ exports.getAccount = async (req, res, next) => {
 
 exports.updateAccount = async (req, res, next) => {
   try {
-    const account = await Account.findById(req.params.account_id);
-
-    // Calculate the new subscription date
-    const currentSubscriptionDate = account.suscribtionDate;
-    const daysToAdd = req.body.daysToAdd || 0; // Default to 0 if not provided
-    const newSubscriptionDate = new Date(
-      currentSubscriptionDate.getTime() + daysToAdd * 24 * 60 * 60 * 1000
-    );
-
     const updateAccount = await Account.findByIdAndUpdate(
       req.params.account_id,
-      {
-        isActive: req.body.isActive,
-        paymentDate: req.body.paymentDate,
-        suscribedMonths: req.body.suscribtionMonth,
-        suscribtionDate: newSubscriptionDate,
-      },
+      req.body,
       {
         new: true,
         runValidators: true,
@@ -267,6 +253,15 @@ exports.deleteAccount = async (req, res, next) => {
 exports.changeActiveState = async (req, res, next) => {
   console.log(req.params.accountId);
   const { isActive, paymentDate } = req.body;
+
+  const account = await Account.findById(req.params.account_id);
+
+  // Calculate the new subscription date
+  const currentSubscriptionDate = account.suscribtionDate;
+  const daysToAdd = req.body.daysToAdd || 0; // Default to 0 if not provided
+  const newSubscriptionDate = new Date(
+    currentSubscriptionDate.getTime() + daysToAdd * 24 * 60 * 60 * 1000
+  );
   try {
     const updateAccount = await Account.findByIdAndUpdate(
       req.params.accountId,
@@ -274,6 +269,8 @@ exports.changeActiveState = async (req, res, next) => {
         isActive: isActive,
         paymentDate: paymentDate,
         updatedAt: Date.now(),
+        suscribedMonths: req.body.suscribtionMonth,
+        suscribtionDate: newSubscriptionDate,
       },
       { new: true }
     );
