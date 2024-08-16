@@ -45,7 +45,9 @@ const accountSchema = new mongoose.Schema({
     type: Date,
     default: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000), // 90 days from now
   },
-
+  suscribedMonths: {
+    type: String,
+  },
   whatsapp_template: {
     type: String,
     default:
