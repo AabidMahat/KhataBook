@@ -47,6 +47,7 @@ const accountSchema = new mongoose.Schema({
   },
   suscribedMonths: {
     type: String,
+    default: "3 Months",
   },
   whatsapp_template: {
     type: String,
