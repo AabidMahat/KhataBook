@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const Admin = require("../models/adminModel");
+const Account = require("../models/accountModel");
 
 exports.createNewAdmin = async (req, res, next) => {
   try {
@@ -76,25 +77,20 @@ exports.getAdmin = async (req, res, next) => {
 
 exports.updateAdmin = async (req, res, next) => {
   try {
-    console.log(req.params.userId);
-    const updateAdmin = await Admin.findByIdAndUpdate(
-      req.params.userId,
-      req.body,
-      {
-        new: true,
-      }
-    );
-
+    const { userId } = req.params;
+    const updateAdmin = await Admin.findByIdAndUpdate(userId, req.body, {
+      new: true,
+    });
     if (!updateAdmin) {
       return res.status(404).json({
         status: "fail",
-        message: "Transaction not found",
+        message: "Admin not found",
       });
     }
 
     res.status(200).json({
       status: "success",
-      message: "Updated the transaction",
+      message: "Updated the admin and account",
       data: updateAdmin,
     });
   } catch (err) {

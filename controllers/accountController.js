@@ -188,9 +188,23 @@ exports.getAccount = async (req, res, next) => {
 
 exports.updateAccount = async (req, res, next) => {
   try {
+    const account = await Account.findById(req.params.account_id);
+
+    // Calculate the new subscription date
+    const currentSubscriptionDate = account.suscribtionDate;
+    const daysToAdd = req.body.daysToAdd || 0; // Default to 0 if not provided
+    const newSubscriptionDate = new Date(
+      currentSubscriptionDate.getTime() + daysToAdd * 24 * 60 * 60 * 1000
+    );
+
     const updateAccount = await Account.findByIdAndUpdate(
       req.params.account_id,
-      req.body,
+      {
+        isActive: req.body.isActive,
+        paymentDate: req.body.paymentDate,
+        suscribedMonths: req.body.suscribtionMonth,
+        suscribtionDate: newSubscriptionDate,
+      },
       {
         new: true,
         runValidators: true,
