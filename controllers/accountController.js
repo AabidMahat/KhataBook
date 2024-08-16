@@ -254,7 +254,7 @@ exports.changeActiveState = async (req, res, next) => {
   console.log(req.params.accountId);
   const { isActive, paymentDate } = req.body;
 
-  const account = await Account.findById(req.params.account_id);
+  const account = await Account.findById(req.params.accountId);
 
   // Calculate the new subscription date
   const currentSubscriptionDate = account.suscribtionDate;
