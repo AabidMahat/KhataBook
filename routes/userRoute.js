@@ -18,4 +18,6 @@ router.route("/resetPassword").patch(userController.resetPassword);
 
 router.route("/allUsers").get(userController.getAllUsers);
 
+router.route("/deleteUser/:userId").delete(userController.deleteUser);
+
 module.exports = router;
