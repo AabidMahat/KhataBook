@@ -103,7 +103,7 @@ exports.updateAdmin = async (req, res, next) => {
 
 exports.userBasedOnOrganization = async (req, res, next) => {
   try {
-    const accounts = await Account.findById(req.params.accountId)
+    const accounts = await Account.find()
       .populate("user_id", "name")
       .populate("staffId", "staff_name")
       .exec();
