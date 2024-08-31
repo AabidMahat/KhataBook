@@ -100,3 +100,29 @@ exports.updateAdmin = async (req, res, next) => {
     });
   }
 };
+
+exports.userBasedOnOrganization = async (req, res, next) => {
+  try {
+    const accounts = await Account.findById(req.params.accountId)
+      .populate("user_id", "name")
+      .populate("staffId", "staff_name")
+      .exec();
+
+    if (!accounts) {
+      return res.status(404).json({
+        status: "fail",
+        message: "Account not found",
+      });
+    }
+
+    res.status(200).json({
+      status: "success",
+      data: accounts,
+    });
+  } catch (err) {
+    res.status(500).json({
+      status: "error",
+      message: err.message,
+    });
+  }
+};

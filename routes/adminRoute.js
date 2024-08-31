@@ -12,4 +12,8 @@ router.route("/getAdmin").get(adminController.getAdmin);
 
 router.route("/updateAdmin/:userId").patch(adminController.updateAdmin);
 
+router
+  .route("/getUserByOrganization/:accountId")
+  .get(adminController.userBasedOnOrganization);
+
 module.exports = router;
