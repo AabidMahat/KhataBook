@@ -13,7 +13,7 @@ router.route("/getAdmin").get(adminController.getAdmin);
 router.route("/updateAdmin/:userId").patch(adminController.updateAdmin);
 
 router
-  .route("/getUserByOrganization/:accountId")
+  .route("/getUserByOrganization")
   .get(adminController.userBasedOnOrganization);
 
 module.exports = router;
