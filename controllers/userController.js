@@ -1,6 +1,7 @@
 const User = require("../models/userModel");
 const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
+const Account = require("../models/accountModel");
 
 const accountSID = process.env.TWILIO_SID;
 const accountAuth = process.env.TWILIO_TOKEN;
@@ -235,6 +236,8 @@ exports.deleteUser = async (req, res, next) => {
   try {
     const { userId } = req.params;
     await User.findByIdAndDelete(userId);
+
+    await Account.deleteMany({ user_id: userId });
 
     res.status(201).json({
       status: "success",
