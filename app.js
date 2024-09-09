@@ -47,7 +47,6 @@ const userRoute = require("./routes/userRoute");
 
 const adminRoute = require("./routes/adminRoute");
 
-const app = express();
 
 app.use(express.json({ limit: "100mb" }));
 app.use(express.urlencoded({ extended: true, limit: "100mb" }));
