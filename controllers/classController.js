@@ -133,3 +133,27 @@ exports.getClasses = async (req, res, next) => {
     });
   }
 };
+
+exports.fetchClass = async (req, res, next) => {
+  try {
+    const { classId } = req.params;
+    const classData = await Class.findById(classId);
+
+    if (!classData) {
+      return res.status(404).json({
+        status: "error",
+        message: "Class not found",
+      });
+    }
+
+    res.status(200).json({
+      status: "success",
+      data: classData,
+    });
+  } catch (err) {
+    return res.status(404).json({
+      status: "error",
+      message: err.message,
+    });
+  }
+};
