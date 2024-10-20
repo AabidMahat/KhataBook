@@ -21,6 +21,11 @@ const studentSchema = new mongoose.Schema({
     type: String,
     required: [true, "Please provide class"],
   },
+
+  classId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Class",
+  },
   address: {
     type: String,
     default: "",
@@ -33,7 +38,6 @@ const studentSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
-
   imagePath: {
     type: String,
     default: "default.jpg",
